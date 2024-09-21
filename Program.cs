@@ -4,11 +4,25 @@ namespace SoftetherAnalyze
     {
         public static void Main(string[] args)
         {
-            var builder = Host.CreateApplicationBuilder(args);
-            builder.Services.AddHostedService<Worker>();
 
-            var host = builder.Build();
-            host.Run();
+                IHost StorageService = Host.CreateDefaultBuilder(args)
+                    .ConfigureServices(services =>
+                    {
+                        services.AddHostedService<StorageController>();
+                    })
+                    .Build();
+
+                StorageService.RunAsync();
+
+                IHost AnaMasterService = Host.CreateDefaultBuilder(args)
+                    .ConfigureServices(services =>
+                    {
+                        services.AddHostedService<AnaMaster>();
+                    })
+                    .Build();
+
+                AnaMasterService.RunAsync();
+            Console.ReadLine();
         }
     }
 }
